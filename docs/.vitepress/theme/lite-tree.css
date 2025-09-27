@@ -1,0 +1,21 @@
+.lite-tree {
+  background-color: var(--vp-code-block-bg);
+  border-radius: 8px;
+  border: none !important;
+}
+
+.lite-tree-node {
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: var(--vp-c-default-soft) !important;
+  }
+}
+
+.lite-tree-node .tag {
+  color: var(--vp-c-tip-1) !important;
+}
+
+.lite-tree-node .tag {
+  color: var(--vp-c-tip-1) !important;
+}

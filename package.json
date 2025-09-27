@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "jszip": "^3.10.1"
+  },
+  "devDependencies": {
+    "@lite-tree/vue": "^1.1.6",
+    "vitepress": "2.0.0-alpha.12",
+    "vitepress-plugin-group-icons": "^1.6.3",
+    "vitepress-plugin-nprogress": "^0.1.1",
+    "vue": "^3.5.22"
+  },
+  "scripts": {
+    "dev": "vitepress dev docs",
+    "build": "vitepress build docs",
+    "preview": "vitepress preview docs"
+  }
+}
