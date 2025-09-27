@@ -66,13 +66,13 @@ Specifies the default cursor settings and may also include animation properties.
 			<td><code>xhot</code>&nbsp;</td>
 			<td><code>int</code></td>
 			<td><code>0</code></td>
-			<td>The x-hotspot position. Caps at image width minus one</td>
+			<td>The x-hotspot position. Caps at image width minus one.</td>
 		</tr>
 		<tr>
 			<td><code>yhot</code>&nbsp;</td>
 			<td><code>int</code></td>
 			<td><code>0</code></td>
-			<td>The y-hotspot position. Caps at image height minus 1</td>
+			<td>The y-hotspot position. Caps at image height minus one.</td>
 		</tr>
 		<tr>
 			<td><code>animated</code>&nbsp;</td>

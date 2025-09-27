@@ -46,7 +46,7 @@ Each cursor has an associated **name** used to identify the texture and its sett
 			<td>The default cursor.</td>
     </tr>
     <tr>
-      <td><code>pointing_hane</code></td>
+      <td><code>pointing_hand</code></td>
       <td><img src="/assets/cursors/pointing_hand.png" width="32" alt="pointer"/></td>
 			<td>Hovered over active buttons and scrollbars</td>
     </tr>
