@@ -10,9 +10,9 @@ Cursors Extended **does not** provide a Java API. Since Minecraft 1.21.9, a stan
 
 - `CursorType`: Represents a GLFW cursor containing the handle and name.
 - `CursorTypes`: Contains premade `CursorType`s.
-- `GuiGraphics#requestCursor(CursorType)`: Schedules a cursor to be applied after render calls, ensuring priority for top rendered elements and preventing conflicts.
-- `Window#selectCursor(CursorType)`: Immediately applies the cursor and tracks the current cursor type. Use sparingly to reduce conflicts.
-- `CursorType#select()`: Immediately applies the cursor. Avoid calling directly, as it may cause conflicts and desynchronize state.
+- `GuiGraphics#requestCursor(CursorType)`: Schedules a cursor to be applied at the end of render calls, ensuring priority for top rendered elements and preventing conflicts.
+- `Window#selectCursor(CursorType)`: Immediately applies the cursor and tracks the current cursor type. Use with caution to reduce conflicts.
+- `CursorType#select()`: Immediately applies the cursor. Avoid calling directly, as it may cause conflicts and will desynchronize state.
 
 ## Creating Custom Cursors
 - When creating a custom cursor, make use of `CursorType` so it can be selected, identified (`#toString()`), and tracked via `GuiGraphics#requestCursor` or `Window#selectCursor`.
