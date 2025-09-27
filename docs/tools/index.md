@@ -7,7 +7,10 @@ next: true
 ---
 
 # V3 Converter
-Automatically convert resource packs from the legacy v3 structure to v4
+Automatically convert resource packs from the legacy v3 structure to v4. 
+
+> [!NOTE]
+> Currently only works on zip files.
 
 <ZipConverter/>
 
