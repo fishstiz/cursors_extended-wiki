@@ -16,7 +16,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { FileProcessor, FileValidationError, FileValidator } from '../types/FileProcessor'
+import { FileProcessor, FileValidationError, FileValidator } from '@/types/FileProcessor'
 
 type Download = Readonly<{ fileName: string; url: string }> | null
 

@@ -1,3 +1,4 @@
+import { resolve } from 'path'
 import { defineConfig } from 'vitepress'
 import { groupIconMdPlugin, groupIconVitePlugin } from 'vitepress-plugin-group-icons'
 
@@ -73,7 +74,8 @@ export default defineConfig({
     }
   },
   vite: {
-    plugins: [groupIconVitePlugin()]
+    plugins: [groupIconVitePlugin()],
+    resolve: { alias: { '@': resolve(__dirname, './') } }
   },
   vue: {
     template: {

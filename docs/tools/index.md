@@ -34,7 +34,7 @@ This allows you to easily modify cursor settings using the in-game GUI, and then
 />
 
 <script setup lang="ts">
-import FileConverter from "../components/FileConverter.vue"
+import FileConverter from "@/components/FileConverter.vue"
 import { processZip as v3Processor, validateZip as v3Validator } from "./v3Mapper"
 import { processConfigFile, validateConfigFile, generateFileName as settingsZipName } from "./settingsGenerator"
 </script>

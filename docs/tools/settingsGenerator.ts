@@ -4,10 +4,10 @@ import {
   FileProcessor,
   FileValidationError,
   FileValidator
-} from '../types/FileProcessor'
-import { isValidConfig } from '../types/Config'
-import CursorSettings from '../types/CursorSettings'
-import { encode } from '../utils/encoder'
+} from '@/types/FileProcessor'
+import { isValidConfig } from '@/types/Config'
+import CursorSettings from '@/types/CursorSettings'
+import { encode } from '@/utils/encoder'
 
 export const validateConfigFile: FileValidator = async (file: File) => {
   return !file.name.toLowerCase().endsWith('.json')

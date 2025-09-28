@@ -135,8 +135,8 @@ Each cursor has an associated **name** used to identify the texture and its sett
 </table>
 
 <script setup lang="ts">
-import { commonNodes, useLiteTreeHighlighter } from '../composables/useLiteTreeHighlighter'
-import icons from '../utils/icons'
+import { commonNodes, useLiteTreeHighlighter } from '@/composables/useLiteTreeHighlighter'
+import icons from '@/utils/icons'
 
 useLiteTreeHighlighter(commonNodes.CURSOR_NAME.regex)
 </script>

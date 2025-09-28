@@ -1,9 +1,9 @@
 import JSZip from 'jszip'
-import CursorsV3Atlas, { isValidCursorsV3Atlas } from '../types/CursorsV3Atlas'
-import { isValidPackMeta } from '../types/PackMeta'
-import { FileProcessor, FileValidator } from '../types/FileProcessor'
-import { decode, encode } from '../utils/encoder'
-import Asset, { AssetMap, AssetMapper, DeferredAsset, MergeStrategy } from '../types/Asset'
+import CursorsV3Atlas, { isValidCursorsV3Atlas } from '@/types/CursorsV3Atlas'
+import { isValidPackMeta } from '@/types/PackMeta'
+import { FileProcessor, FileValidator } from '@/types/FileProcessor'
+import { decode, encode } from '@/utils/encoder'
+import Asset, { AssetMap, AssetMapper, DeferredAsset, MergeStrategy } from '@/types/Asset'
 
 type JSZipAssetMapper = AssetMapper<JSZip.JSZipObject>
 type CursorAssets = { cursors: AssetMap; meta: AssetMap }
