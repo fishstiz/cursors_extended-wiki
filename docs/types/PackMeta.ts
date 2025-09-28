@@ -7,3 +7,7 @@ export default interface PackMeta {
     supported_formats?: string[]
   }
 }
+
+export function isValidPackMeta(data: any): data is PackMeta {
+  return data && typeof data === 'object' && 'pack' in data && typeof data.pack === 'object'
+}

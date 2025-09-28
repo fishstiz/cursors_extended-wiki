@@ -11,7 +11,10 @@
     "isolatedModules": true,
     "esModuleInterop": true,
     "lib": ["esnext", "dom"],
-    "skipLibCheck": true,
+    "skipLibCheck": true
+  },
+  "vueCompilerOptions": {
+    "vitePressExtensions": [".md"]
   },
   "include": [
     "typings/**/*.d.ts",
@@ -24,5 +27,5 @@
     "docs/**/*.md"
   ],
   "exclude": ["**/node_modules/**", "**/dist/**"],
-  "extensions": [".js", ".ts", ".tsx", ".jsx", ".vue", ".md"],
+  "extensions": [".js", ".ts", ".tsx", ".jsx", ".vue", ".md"]
 }

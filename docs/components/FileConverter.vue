@@ -1,15 +1,14 @@
 <template>
   <div class="container">
     <div>
-      <input @change="onFileChange" type="file" accept=".zip" />
+      <input @change="onFileChange" :accept="accept" type="file" />
     </div>
     <button :disabled="!selectedFile || processing" @click="processFile" class="action-btn">
-      CONVERT
+      {{ actionText ?? 'CONVERT' }}
     </button>
-    <a :href="downloadUrl ?? undefined" :download="'v4_' + selectedFile?.name">
-      <button :disabled="!downloadUrl || processing" class="action-btn alt">
-        <span v-if="processing">PROCESSING...</span>
-        <span v-else>DOWNLOAD</span>
+    <a :href="download?.url ?? undefined" :download="download?.fileName ?? undefined">
+      <button :disabled="!download || processing" class="action-btn alt">
+        {{ processing ? 'PROCESSING...' : 'DOWNLOAD' }}
       </button>
     </a>
   </div>
@@ -17,73 +16,88 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import JSZip from 'jszip'
-import { Asset, assetMap } from '../utils/assetMap'
+import { FileProcessor, FileValidationError, FileValidator } from '../types/FileProcessor'
+
+type Download = Readonly<{ fileName: string; url: string }> | null
+
+const props = defineProps<{
+  processor: FileProcessor
+  actionText?: string
+  accept?: string
+  validator?: FileValidator
+  downloadName?: string | ((fileName: string) => string)
+}>()
 
 const selectedFile = ref<File | null>(null)
-const downloadUrl = ref<string | null>(null)
+const download = ref<Download>(null)
 const processing = ref<boolean>(false)
 
-function onFileChange(event: Event) {
-  const target = event.target as HTMLInputElement
-  const file = target.files?.[0]
-  if (!file) return
-  selectedFile.value = file
-  revokeDownloadUrl()
+function removeOutput() {
+  if (download.value) {
+    URL.revokeObjectURL(download.value.url)
+  }
+  download.value = null
 }
 
-function revokeDownloadUrl() {
-  if (downloadUrl.value) {
-    URL.revokeObjectURL(downloadUrl.value)
+async function validateFile(file: File) {
+  if (props.validator) {
+    try {
+      const result = await props.validator(file)
+      if (!result.ok) {
+        throw new FileValidationError(result.error ?? 'Unknown Error')
+      }
+    } catch (e) {
+      alert(e)
+      console.error('Error validating file.', e)
+      return false
+    }
   }
-  downloadUrl.value = null
+
+  return true
+}
+
+async function onFileChange(event: Event) {
+  const target = event.target as HTMLInputElement
+  const file = target.files?.[0]
+
+  if (!file) return
+
+  removeOutput()
+
+  if (!(await validateFile(file))) {
+    selectedFile.value = null
+    target.value = ''
+    return
+  }
+
+  selectedFile.value = file
+}
+
+function generateFilename() {
+  if (!selectedFile.value) return 'undefined'
+
+  if (props.downloadName) {
+    return typeof props.downloadName === 'string'
+      ? props.downloadName
+      : props.downloadName(selectedFile.value.name)
+  }
+
+  return selectedFile.value.name.replace(/\.(?!.*\.)/, '-converted.')
 }
 
 async function processFile() {
   try {
     if (!selectedFile.value) return
     processing.value = true
-
-    const arrayBuffer = await selectedFile.value.arrayBuffer()
-    const zip = await JSZip.loadAsync(arrayBuffer)
-
-    const assetBuckets: Record<string, Asset[]> = {}
-
-    const promises: Promise<void>[] = []
-    zip.forEach((relativePath, zipEntry) => {
-      const mappedAsset = assetMap[relativePath]
-      if (!mappedAsset || !zipEntry) return
-
-      const promise = mappedAsset.map(zipEntry).then((assets) => {
-        for (const asset of assets) {
-          if (!assetBuckets[asset.path]) assetBuckets[asset.path] = []
-          assetBuckets[asset.path].push(asset)
-        }
-      })
-      promises.push(promise)
-    })
-    await Promise.all(promises)
-
-    const newZip = new JSZip()
-    for (const [path, assets] of Object.entries(assetBuckets)) {
-      let merged = assets[0]
-      for (let i = 1; i < assets.length; i++) {
-        const asset = assets[i]
-        if (asset) {
-          merged = merged.mergeStrategy.apply(merged, asset)
-        }
-      }
-
-      newZip.file(path, merged.data, { binary: true, createFolders: false })
+    removeOutput()
+    download.value = {
+      fileName: generateFilename(),
+      url: URL.createObjectURL(await props.processor(selectedFile.value))
     }
-
-    const newZipBlob = await newZip.generateAsync({ type: 'blob' })
-    if (downloadUrl.value) URL.revokeObjectURL(downloadUrl.value)
-    downloadUrl.value = URL.createObjectURL(newZipBlob)
     processing.value = false
   } catch (e) {
-    alert('Error processing file:' + e)
-    console.error('Error processing file', e)
+    alert(e)
+    console.error('An error occurred while processing file.', e)
     processing.value = false
   }
 }
@@ -95,6 +109,7 @@ async function processFile() {
   row-gap: 10px;
   grid-template-rows: repeat(3, 1fr);
   width: 100%;
+  margin-bottom: 3rem;
 }
 
 input[type='file'] {

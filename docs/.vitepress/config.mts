@@ -51,7 +51,10 @@ export default defineConfig({
       {
         text: 'Tools',
         link: '/tools',
-        items: [{ text: 'V3 Converter', link: '/tools#v3-converter' }]
+        items: [
+          { text: 'V3 Converter', link: '/tools#v3-converter' },
+          { text: 'Cursor Settings Generator', link: '/tools#cursor-settings-generator' }
+        ]
       }
     ],
     search: { provider: 'local' },
