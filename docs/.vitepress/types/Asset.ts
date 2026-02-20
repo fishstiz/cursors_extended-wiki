@@ -3,12 +3,12 @@ export type MergeStrategy<T> = { merge: (a: T, b: T) => T }
 export default interface Asset {
   path: string
   data: Uint8Array
-  mergeStrategy: MergeStrategy<Asset>
+  mergeStrategy?: MergeStrategy<Asset>
 }
 
-export type AssetMapper<T = any> = (t: T) => Promise<Asset[]>
-export type DeferredAsset<M extends AssetMapper = AssetMapper<unknown>> = { get: M }
-export type AssetMap<M extends AssetMapper = AssetMapper<unknown>> = Record<
-  string,
-  DeferredAsset<M>
+export type AssetProvider<T> = (t: T) => Promise<Asset[]>
+export type AssetHolder<P extends AssetProvider<any> = AssetProvider<unknown>> = { get: P }
+export type AssetMap<P extends AssetProvider<any> = AssetProvider<unknown>> = Record<
+  Asset['path'],
+  AssetHolder<P>
 >

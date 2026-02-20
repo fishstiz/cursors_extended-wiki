@@ -1,10 +1,5 @@
 import JSZip from 'jszip'
-import {
-  FileProcessingError,
-  FileProcessor,
-  FileValidationError,
-  FileValidator
-} from '@/types/FileProcessor'
+import { FileProcessor, FileValidationError, FileValidator } from '@/utils/fileValidator'
 import { isValidConfig } from '@/types/Config'
 import CursorSettings from '@/types/CursorSettings'
 import { encode } from '@/utils/encoder'

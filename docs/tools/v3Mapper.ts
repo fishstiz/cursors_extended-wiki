@@ -1,11 +1,11 @@
 import JSZip from 'jszip'
-import CursorsV3Atlas, { isValidCursorsV3Atlas } from '@/types/CursorsV3Atlas'
+import { isValidCursorsV3Atlas } from '@/types/CursorsV3Atlas'
 import { isValidPackMeta } from '@/types/PackMeta'
-import { FileProcessor, FileValidator } from '@/types/FileProcessor'
+import { FileProcessor, FileValidator } from '@/utils/fileValidator'
 import { decode, encode } from '@/utils/encoder'
-import Asset, { AssetMap, AssetMapper, DeferredAsset, MergeStrategy } from '@/types/Asset'
+import Asset, { AssetMap, AssetProvider, AssetHolder, MergeStrategy } from '@/types/Asset'
 
-type JSZipAssetMapper = AssetMapper<JSZip.JSZipObject>
+type JSZipAssetMapper = AssetProvider<JSZip.JSZipObject>
 type CursorAssets = { cursors: AssetMap; meta: AssetMap }
 
 const PREVIOUS_NAMESPACE = 'assets/minecraft-cursor'
@@ -87,7 +87,7 @@ function mapCursors(map: Record<string, string[]>): CursorAssets {
     Object.assign(cursorAssets.meta, {
       [`${oldPath}.mcmeta`]: {
         get: mapCursorMeta(newNames.map((name) => `${newPath(name)}.json`))
-      } satisfies DeferredAsset<JSZipAssetMapper>
+      } satisfies AssetHolder<JSZipAssetMapper>
     })
   }
 
@@ -102,12 +102,11 @@ const mapCursorSettings: JSZipAssetMapper = async (cursorsJson: JSZip.JSZipObjec
     if (!isValidCursorsV3Atlas(data)) return assets
 
     for (const [key, settings] of Object.entries(data.settings)) {
-      const deferredAsset =
-        cursorAssets.cursors[`${PREVIOUS_NAMESPACE}/textures/cursors/${key}.png`]
+      const provider = cursorAssets.cursors[`${PREVIOUS_NAMESPACE}/textures/cursors/${key}.png`]
 
-      if (!deferredAsset) continue
+      if (!provider) continue
 
-      for (const cursorAsset of await deferredAsset?.get(cursorsJson)) {
+      for (const cursorAsset of await provider?.get(cursorsJson)) {
         assets.push({
           path: `${cursorAsset.path}.json`,
           data: encode(JSON.stringify({ cursor: settings }, null, 2)),
@@ -189,7 +188,7 @@ export const processZip: FileProcessor = async (file: File) => {
     let merged = assets[0]
     for (let i = 1; i < assets.length; i++) {
       const asset = assets[i]
-      if (asset) {
+      if (asset && merged.mergeStrategy) {
         merged = merged.mergeStrategy.merge(merged, asset)
       }
     }

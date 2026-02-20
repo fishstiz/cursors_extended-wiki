@@ -1,8 +1,11 @@
 <template>
   <div class="container">
-    <div>
-      <input @change="onFileChange" :accept="accept" type="file" />
-    </div>
+    <FileInput
+      @change="handleChange"
+      :accept="accept"
+      :validator="validator"
+      :disabled="processing"
+    />
     <button :disabled="!selectedFile || processing" @click="processFile" class="action-btn">
       {{ actionText ?? 'CONVERT' }}
     </button>
@@ -16,7 +19,8 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { FileProcessor, FileValidationError, FileValidator } from '@/types/FileProcessor'
+import { FileProcessor, FileValidator } from '@/utils/fileValidator'
+import FileInput, { ChangeEvent } from './FileInput.vue'
 
 type Download = Readonly<{ fileName: string; url: string }> | null
 
@@ -32,45 +36,11 @@ const selectedFile = ref<File | null>(null)
 const download = ref<Download>(null)
 const processing = ref<boolean>(false)
 
-function removeOutput() {
+function removeDownload() {
   if (download.value) {
     URL.revokeObjectURL(download.value.url)
   }
   download.value = null
-}
-
-async function validateFile(file: File) {
-  if (props.validator) {
-    try {
-      const result = await props.validator(file)
-      if (!result.ok) {
-        throw new FileValidationError(result.error ?? 'Unknown Error')
-      }
-    } catch (e) {
-      alert(e)
-      console.error('Error validating file.', e)
-      return false
-    }
-  }
-
-  return true
-}
-
-async function onFileChange(event: Event) {
-  const target = event.target as HTMLInputElement
-  const file = target.files?.[0]
-
-  if (!file) return
-
-  removeOutput()
-
-  if (!(await validateFile(file))) {
-    selectedFile.value = null
-    target.value = ''
-    return
-  }
-
-  selectedFile.value = file
 }
 
 function generateFilename() {
@@ -85,11 +55,16 @@ function generateFilename() {
   return selectedFile.value.name.replace(/\.(?!.*\.)/, '-converted.')
 }
 
+function handleChange(e: ChangeEvent.Post) {
+  removeDownload()
+  selectedFile.value = e.file
+}
+
 async function processFile() {
   try {
     if (!selectedFile.value) return
     processing.value = true
-    removeOutput()
+    removeDownload()
     download.value = {
       fileName: generateFilename(),
       url: URL.createObjectURL(await props.processor(selectedFile.value))
@@ -106,55 +81,19 @@ async function processFile() {
 <style scoped>
 .container {
   display: grid;
-  row-gap: 10px;
-  grid-template-rows: repeat(3, 1fr);
-  width: 100%;
-  margin-bottom: 3rem;
-}
-
-input[type='file'] {
-  height: 100%;
-  font-size: 1rem;
-  width: calc(100% - 12px);
-  padding: 5px;
-  border-radius: 5px;
-  outline: dashed 2px var(--vp-c-gray-1);
-  box-sizing: content-box;
-}
-
-input::file-selector-button {
-  padding: 5px 20px;
-  border-radius: 5px;
-  transition: background-color 200ms;
-  font-family: var(--vp-font-family-base);
-  font-weight: bold;
-  text-transform: uppercase;
-  font-size: 14px;
-  height: 100%;
-  background-color: var(--vp-button-brand-bg);
-  color: var(--vp-button-brand-text);
-  border: var(--vp-button-brand-border);
-  cursor: pointer;
-}
-
-input::file-selector-button:hover {
-  background-color: var(--vp-button-brand-hover-bg);
-  color: var(--vp-button-brand-hover-text);
-}
-
-input::file-selector-button:active {
-  background-color: var(--vp-button-brand-active-bg);
-  color: var(--vp-button-brand-active-text);
+  row-gap: 0.67em;
+  grid-template-rows: repeat(3, 2.67rem);
 }
 
 .action-btn {
   margin-top: 10px;
-  padding: 5px 20px;
-  border-radius: 5px;
+  padding: 0.33em 1em;
+  border-radius: 0.33em;
   transition: background-color 200ms;
   font-weight: bold;
   width: 100%;
   height: 100%;
+  font-size: 1rem;
 
   &:disabled {
     background-color: var(--vp-c-gray-3);

@@ -3,7 +3,7 @@ title: Getting Started
 ---
 # Getting Started
 
-This wiki was last updated on v4 of Cursors Extended. Click [here](https://fishstiz.github.io/minecraft-cursor-wiki/resource-pack/getting-started) for the v3 wiki.
+This wiki was last updated on v4 of Cursors Extended. Click [here](https://fishstiz.github.io/minecraft-cursor-wiki/resource-pack/getting-started) for the v3 wiki for Minecraft versions 1.21.8 and below.
 
 You can convert v3 resource packs to v4 using the [V3 Converter](/tools/#v3-converter) tool.
 

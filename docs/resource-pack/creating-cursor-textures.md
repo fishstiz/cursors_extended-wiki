@@ -21,7 +21,7 @@ next: false
 3. Add the `animation` properties to the [cursor settings](#cursor-settings). Without the `animation` properties, the whole image will be read as a single cursor texture.
 
 ## Cursor Settings
-Specifies the default cursor settings and may also include animation properties. This file is optional; if omitted, the default values will be applied instead.
+Specifies the default cursor settings and may also include animation properties. This file is optional; if omitted, the default or inherited values will be applied instead.
 
 ```json [cursor-name.png.json]
 {
