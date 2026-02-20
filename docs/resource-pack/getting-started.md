@@ -8,7 +8,7 @@ This wiki was last updated on v4 of Cursors Extended. Click [here](https://fishs
 You can convert v3 resource packs to v4 using the [V3 Converter](/tools/#v3-converter) tool.
 
 You may also start with this template to serve as guide:
-[Legacy-Cursors_v4.0.0.zip](https://github.com/user-attachments/files/22567705/Legacy-Cursors_v4.0.0.zip)
+[Legacy-Cursors_v4.0.0.zip](https://raw.githubusercontent.com/fishstiz/cursors_extended-wiki/master/resources/Legacy-Cursors_v4.0.0.zip)
 
 ## Resource Pack Structure
 **namespace**: `cursors_extended`
