@@ -1,19 +1,23 @@
 {
   "devDependencies": {
     "@lite-tree/vue": "^1.1.6",
-    "@types/node": "^24.5.2",
+    "@types/node": "^24.12.2",
     "jszip": "^3.10.1",
-    "typescript": "^5.9.2",
+    "typescript": "^6.0.2",
+    "vite-plugin-static-copy": "^4.0.1",
     "vitepress": "2.0.0-alpha.12",
-    "vitepress-plugin-group-icons": "^1.6.3",
+    "vitepress-plugin-group-icons": "^1.7.5",
     "vitepress-plugin-nprogress": "^0.1.1",
-    "vue": "^3.5.22",
-    "vue-tsc": "^3.1.0"
+    "vue": "^3.5.32",
+    "vue-tsc": "^3.2.6"
   },
   "scripts": {
     "dev": "vitepress dev docs",
     "build": "vitepress build docs",
     "preview": "vitepress preview docs",
     "start": "vitepress build docs && vitepress preview docs"
+  },
+  "dependencies": {
+    "zod": "^4.3.6"
   }
 }

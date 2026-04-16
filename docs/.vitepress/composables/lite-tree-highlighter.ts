@@ -1,7 +1,7 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 
 interface HighlightedNode {
-  node: string,
+  node: string
   regex: RegExp
 }
 

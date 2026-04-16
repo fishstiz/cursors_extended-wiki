@@ -1,6 +1,5 @@
 ---
 title: Creating Cursor Textures
-next: false
 ---
 # Creating Cursor Textures
 
@@ -241,3 +240,5 @@ Specifies the default cursor settings and may also include animation properties.
 ## Practical Examples
 
 For more examples, you can take a look at the built-in textures in the [source files](https://github.com/fishstiz/cursors_extended/tree/master/common/src/main/resources/resourcepacks).
+
+You may also view the community-made resource packs [here](/resource-pack/showcase).

@@ -26,6 +26,7 @@ const emit = defineEmits<{
 }>()
 
 async function validateFile(file: File) {
+  // @ts-ignore
   if (props.validator) {
     try {
       const result = await props.validator(file)

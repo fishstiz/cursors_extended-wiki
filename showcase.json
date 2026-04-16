@@ -1,0 +1,90 @@
+{
+  "$schema": "./showcase.schema.json",
+  "packs": [
+    {
+      "name": "Omni Cursors",
+      "modrinthId": "uuqPdQ8L",
+      "curseforgeId": "1383051"
+    },
+    {
+      "name": "Nerf's Fancy Cursor",
+      "modrinthId": "tCHaHTZG",
+      "curseforgeId": "1317686"
+    },
+    {
+      "name": "Farmer's Cursor",
+      "modrinthId": "FrwZ5Xul",
+      "curseforgeId": "1378856"
+    },
+    {
+      "name": "Monkey-Style Cursors",
+      "modrinthId": "neySY92f",
+      "curseforgeId": "1294309"
+    },
+    {
+      "name": "Pixel Cursors",
+      "modrinthId": "5f7SMVUe"
+    },
+    {
+      "name": "Pixel Cursors-Dark mode",
+      "modrinthId": "trWOzpoR"
+    },
+    {
+      "name": "Pixel Cursor++",
+      "modrinthId": "idbysdLy"
+    },
+    {
+      "name": "Catified Cursor",
+      "modrinthId": "syYLOOdu"
+    },
+    {
+      "name": "Prism Cursor",
+      "modrinthId": "cgeOauuk"
+    },
+    {
+      "name": "Cursors for Hypixel Skyblock",
+      "modrinthId": "AV1IBrbe"
+    },
+    {
+      "name": "Cursor Hand",
+      "curseforgeId": "1422218"
+    },
+    {
+      "name": "Cursor Pink Mittens",
+      "curseforgeId": "1278965"
+    },
+    {
+      "name": "VUL's Create Cursors",
+      "modrinthId": "5lpz2C5Q"
+    },
+    {
+      "name": "Excalibur Cursors",
+      "modrinthId": "ioAbwU6c"
+    },
+    {
+      "name": "Excalibur Cursor",
+      "curseforgeId": "1380190"
+    },
+    {
+      "name": "Excalibur | Tooltips & Cursor",
+      "modrinthId": "HYz5DbMG"
+    },
+    {
+      "name": "Windows 98 Cursors",
+      "modrinthId": "vQ1zgZ3P"
+    },
+    {
+      "name": "Clean Bedrock-Style Cursors",
+      "modrinthId": "xstBA7Bt",
+      "curseforgeId": "1392759"
+    },
+    {
+      "name": "Black Knift Cursor",
+      "modrinthId": "b3EJ9eV4"
+    },
+    {
+      "name": "Amethyst Cursor - Cursors Extended RP",
+      "modrinthId": "2GjG4yWn"
+    }
+  ]
+}

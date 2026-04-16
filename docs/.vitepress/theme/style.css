@@ -141,15 +141,12 @@
   /* --vp-custom-block-tip-text: var(--vp-c-text-3);
   --vp-custom-block-tip-bg: var(--vp-c-brand-soft);
   --vp-custom-block-tip-code-bg: var(--vp-c-brand-soft); */
+  --docsearch-search-button-background: var(--vp-c-bg-alt) !important
 }
 
 /**
  * Component: Algolia
  * -------------------------------------------------------------------------- */
-
-.DocSearch {
-  --docsearch-primary-color: var(--vp-c-brand-1) !important;
-}
 
 /**
 * Scrollbar

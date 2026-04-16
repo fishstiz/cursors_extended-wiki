@@ -1,0 +1,19 @@
+name: Showcase Submission
+description: Submit your resource pack to the showcase
+labels: ['showcase']
+body:
+  - type: input
+    id: name
+    label: Name
+    validations:
+      required: true
+
+  - type: input
+    id: modrinth_id
+    label: Modrinth Project ID
+    description: Required if no CurseForge ID
+
+  - type: input
+    id: curseforge_id
+    label: CurseForge Project ID
+    description: Required if no Modrinth ID

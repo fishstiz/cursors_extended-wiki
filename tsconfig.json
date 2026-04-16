@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "strict": true,
     "isolatedModules": true,
     "esModuleInterop": true,
@@ -12,10 +12,9 @@
       "@/*": ["./docs/.vitepress/*"]
     }
   },
-  "include": ["docs/**/*.ts", "docs/**/*.vue", "**/*.md"],
+  "include": ["**/*.ts", "**/*.vue", "**/*.md"],
   "exclude": ["**/node_modules/**", "**/dist/**"],
   "vueCompilerOptions": {
     "vitePressExtensions": [".md"]
-  },
-  "allowSyntheticDefaultImports": true
+  }
 }

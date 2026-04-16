@@ -21,3 +21,9 @@ pnpm preview
 ```bash
 pnpm start
 ```
+
+## Showcase
+
+View the community showcase at [/showcase](https://fishstiz.github.io/cursors_extended-wiki/showcase).
+
+To add your resource pack, [open an issue](https://github.com/fishstiz/cursors_extended-wiki/issues) or submit a PR editing [`docs/public/packs.json`](./docs/public/packs.json).

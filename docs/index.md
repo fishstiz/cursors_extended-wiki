@@ -11,6 +11,9 @@ hero:
     text: Getting Started
     link: /resource-pack/getting-started
   - theme: alt
+    text: Showcase
+    link: /resource-pack/showcase
+  - theme: alt
     text: Tools
     link: /tools
 

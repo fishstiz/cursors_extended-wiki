@@ -15,6 +15,7 @@ export default defineConfig({
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Getting Started', link: '/resource-pack/getting-started' },
+      { text: 'Showcase', link: '/resource-pack/showcase' },
       { text: 'Tools', link: '/tools' }
     ],
     sidebar: [
@@ -42,12 +43,12 @@ export default defineConfig({
                 link: '/resource-pack/creating-cursor-textures#cursor-settings'
               }
             ]
+          },
+          {
+            text: 'Showcase',
+            link: '/resource-pack/showcase'
           }
         ]
-      },
-      {
-        text: 'Java API',
-        items: [{ text: 'Ensuring Compatibility', link: '/java-api/ensuring-compatibility' }]
       },
       {
         text: 'Tools',
@@ -56,6 +57,10 @@ export default defineConfig({
           { text: 'V3 Converter', link: '/tools#v3-converter' },
           { text: 'Cursor Settings Generator', link: '/tools#cursor-settings-generator' }
         ]
+      },
+      {
+        text: 'Java API',
+        items: [{ text: 'Ensuring Compatibility', link: '/java-api/ensuring-compatibility' }]
       }
     ],
     search: { provider: 'local' },
@@ -75,7 +80,8 @@ export default defineConfig({
   },
   vite: {
     plugins: [groupIconVitePlugin()],
-    resolve: { alias: { '@': resolve(__dirname, './') } }
+    resolve: { alias: { '@': resolve(__dirname, './') } },
+    ssr: { noExternal: ['vitepress-plugin-nprogress'] }
   },
   vue: {
     template: {

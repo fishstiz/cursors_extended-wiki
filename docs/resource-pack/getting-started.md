@@ -3,12 +3,17 @@ title: Getting Started
 ---
 # Getting Started
 
-This wiki was last updated on v4 of Cursors Extended. Click [here](https://fishstiz.github.io/minecraft-cursor-wiki/resource-pack/getting-started) for the v3 wiki for Minecraft versions 1.21.8 and below.
+> [!IMPORTANT] 
+> This wiki was last updated on v4 of Cursors Extended. Click [here](https://fishstiz.github.io/minecraft-cursor-wiki/resource-pack/getting-started) for the v3 wiki for Minecraft versions 1.21.8 and below.
 
-You can convert v3 resource packs to v4 using the [V3 Converter](/tools/#v3-converter) tool.
+> [!TIP]
+> You can convert **v3** resource packs to **v4** using the [V3 Converter](/tools/#v3-converter) tool.
 
-You may also start with this template to serve as guide:
-[Legacy-Cursors_v4.0.0.zip](https://raw.githubusercontent.com/fishstiz/cursors_extended-wiki/master/resources/Legacy-Cursors_v4.0.0.zip)
+> [!INFO]
+> View community-made resource packs **[here](/resource-pack/showcase)**.
+
+You may optionally start with this template to serve as guide:
+[Legacy-Cursors_v4.0.0.zip](/templates/Legacy-Cursors_v4.0.0.zip)
 
 ## Resource Pack Structure
 **namespace**: `cursors_extended`
@@ -135,7 +140,7 @@ Each cursor has an associated **name** used to identify the texture and its sett
 </table>
 
 <script setup lang="ts">
-import { commonNodes, useLiteTreeHighlighter } from '@/composables/useLiteTreeHighlighter'
+import { commonNodes, useLiteTreeHighlighter } from '@/composables/lite-tree-highlighter'
 import icons from '@/utils/icons'
 
 useLiteTreeHighlighter(commonNodes.CURSOR_NAME.regex)
