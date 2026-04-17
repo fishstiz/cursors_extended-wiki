@@ -13,7 +13,10 @@ export const CurseforgeProject = z.looseObject({
   summary: z.string(),
   links: z.object({ websiteUrl: z.string() }),
   logo: z.object({ url: z.string() }),
-  authors: Author.array()
+  authors: Author.array(),
+  downloadCount: z.number(),
+  dateReleased: z.string().pipe(z.coerce.date()),
+  dateModified: z.string().pipe(z.coerce.date())
 })
 
 export type CurseforgeProject = z.infer<typeof CurseforgeProject>

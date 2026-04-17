@@ -5,4 +5,7 @@ export type Project = {
   icon?: string | null
   modrinthUrl?: string
   curseforgeUrl?: string
+  downloads: number
+  published: Date
+  modified: Date
 }

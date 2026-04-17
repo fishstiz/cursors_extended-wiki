@@ -2,6 +2,11 @@
   "$schema": "./showcase.schema.json",
   "packs": [
     {
+      "name": "Cobblemon Interface",
+      "modrinthId": "5DF3hBIs",
+      "curseforgeId": "860898"
+    },
+    {
       "name": "Omni Cursors",
       "modrinthId": "uuqPdQ8L",
       "curseforgeId": "1383051"
@@ -74,6 +79,10 @@
       "modrinthId": "vQ1zgZ3P"
     },
     {
+      "name": "Create brass cursors",
+      "modrinthId": "M1lkKD8r"
+    },
+    {
       "name": "Clean Bedrock-Style Cursors",
       "modrinthId": "xstBA7Bt",
       "curseforgeId": "1392759"
@@ -85,6 +94,18 @@
     {
       "name": "Amethyst Cursor - Cursors Extended RP",
       "modrinthId": "2GjG4yWn"
+    },
+    {
+      "name": "Simply Pink",
+      "modrinthId": "GFJnaUUa"
+    },
+    {
+      "name": "Wynncursor",
+      "modrinthId": "TTjDq0jQ"
+    },
+    {
+      "name": "Green Cursor",
+      "modrinthId": "EHhCMyBx"
     }
   ]
 }

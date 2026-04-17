@@ -46,7 +46,7 @@ async function fetchModrinthAuthor(id: string, signal?: AbortSignal): Promise<st
     .parse(await res.json())
     .sort((a, b) => a.ordering - b.ordering)
 
-  return members?.[0].user.name || members[0]?.user.username || ''
+  return members[0]?.user?.name || members[0]?.user?.username || ''
 }
 
 async function fetchModrinth(ids: string[], signal?: AbortSignal): Promise<ModrinthProject[]> {
@@ -124,11 +124,24 @@ async function fetchProjects(signal?: AbortSignal): Promise<Reactive<Project>[]>
       modrinthUrl: modrinthProject
         ? `https://www.modrinth.com/${modrinthProject.project_type}/${modrinthProject.slug ?? modrinthProject.id}`
         : undefined,
-      curseforgeUrl: curseforgeProject ? curseforgeProject.links.websiteUrl : undefined
+      curseforgeUrl: curseforgeProject ? curseforgeProject.links.websiteUrl : undefined,
+      downloads: (modrinthProject?.downloads ?? 0) + (curseforgeProject?.downloadCount ?? 0),
+      published: new Date(
+        Math.min(
+          modrinthProject?.published?.getTime() ?? Infinity,
+          curseforgeProject?.dateReleased?.getTime() ?? Infinity
+        )
+      ),
+      modified: new Date(
+        Math.max(
+          modrinthProject?.updated?.getTime() ?? 0,
+          curseforgeProject?.dateModified?.getTime() ?? 0
+        )
+      )
     })
 
     if (curseforgeProject) {
-      project.author = curseforgeProject.authors?.[0]?.name ?? ''
+      project.author = curseforgeProject.authors?.[0]?.name ?? 'Unknown'
     } else if (pack.modrinthId) {
       fetchModrinthAuthor(pack.modrinthId, signal)
         .then((name) => (project.author = name))
