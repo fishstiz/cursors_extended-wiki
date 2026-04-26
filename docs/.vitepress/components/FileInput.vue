@@ -12,7 +12,7 @@ export namespace ChangeEvent {
 </script>
 
 <script setup lang="ts">
-import { FileValidationError, FileValidator } from '@/utils/fileValidator'
+import { FileValidationError, FileValidator } from '@/utils/file-validator'
 import { JSX } from 'vue/jsx-runtime'
 
 type Props = Omit</* @vue-ignore */ JSX.IntrinsicElements['input'], 'type' | 'onChange'> & {

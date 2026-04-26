@@ -19,7 +19,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { FileProcessor, FileValidator } from '@/utils/fileValidator'
+import { FileProcessor, FileValidator } from '@/utils/file-validator'
 import FileInput, { ChangeEvent } from './FileInput.vue'
 
 type Download = Readonly<{ fileName: string; url: string }> | null

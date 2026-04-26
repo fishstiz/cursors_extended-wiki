@@ -1,11 +1,12 @@
 import JSZip from 'jszip'
-import { isValidCursorsV3Atlas } from '@/types/CursorsV3Atlas'
-import { isValidPackMeta } from '@/types/PackMeta'
-import { FileProcessor, FileValidator } from '@/utils/fileValidator'
+import { CursorAtlasV3 } from '@/schema/cursor-atlas-v3'
+import { PackMeta } from '@/schema/pack-meta'
+import { FileProcessor, FileValidator } from '@/utils/file-validator'
 import { decode, encode } from '@/utils/encoder'
-import Asset, { AssetMap, AssetProvider, AssetHolder, MergeStrategy } from '@/types/Asset'
+import type { Asset, AssetMap, AssetProvider, AssetHolder, MergeStrategy } from '@/schema/asset'
+import z from 'zod'
 
-type JSZipAssetMapper = AssetProvider<JSZip.JSZipObject>
+type JSZipAssetMap = AssetProvider<JSZip.JSZipObject>
 type CursorAssets = { cursors: AssetMap; meta: AssetMap }
 
 const PREVIOUS_NAMESPACE = 'assets/minecraft-cursor'
@@ -43,7 +44,7 @@ const cursorAssets: CursorAssets = mapCursors({
   resize_nwse: ['resize_nwse']
 })
 
-function mapImages(oldPath: string, ...newPaths: string[]): AssetMap<JSZipAssetMapper> {
+function mapImages(oldPath: string, ...newPaths: string[]): AssetMap<JSZipAssetMap> {
   return {
     [oldPath]: {
       get: async (image) => {
@@ -54,7 +55,7 @@ function mapImages(oldPath: string, ...newPaths: string[]): AssetMap<JSZipAssetM
   }
 }
 
-function mapCursorMeta(paths: string[]): JSZipAssetMapper {
+function mapCursorMeta(paths: string[]): JSZipAssetMap {
   return async (metaJson: JSZip.JSZipObject) => {
     const assets: Asset[] = []
 
@@ -87,21 +88,21 @@ function mapCursors(map: Record<string, string[]>): CursorAssets {
     Object.assign(cursorAssets.meta, {
       [`${oldPath}.mcmeta`]: {
         get: mapCursorMeta(newNames.map((name) => `${newPath(name)}.json`))
-      } satisfies AssetHolder<JSZipAssetMapper>
+      } satisfies AssetHolder<JSZipAssetMap>
     })
   }
 
   return cursorAssets
 }
 
-const mapCursorSettings: JSZipAssetMapper = async (cursorsJson: JSZip.JSZipObject) => {
+const mapCursorSettings: JSZipAssetMap = async (cursorsJson: JSZip.JSZipObject) => {
   const assets: Asset[] = []
 
   try {
-    const data = JSON.parse(await cursorsJson.async('string'))
-    if (!isValidCursorsV3Atlas(data)) return assets
+    const result = CursorAtlasV3.safeParse(JSON.parse(await cursorsJson.async('string')))
+    if (!result.success) return assets
 
-    for (const [key, settings] of Object.entries(data.settings)) {
+    for (const [key, settings] of Object.entries(result.data.settings)) {
       const provider = cursorAssets.cursors[`${PREVIOUS_NAMESPACE}/textures/cursors/${key}.png`]
 
       if (!provider) continue
@@ -121,17 +122,24 @@ const mapCursorSettings: JSZipAssetMapper = async (cursorsJson: JSZip.JSZipObjec
   return assets
 }
 
-const mapMcmeta: JSZipAssetMapper = async (mcmetaJson: JSZip.JSZipObject) => {
+const mapMcmeta: JSZipAssetMap = async (mcmetaJson: JSZip.JSZipObject) => {
   const assets: Asset[] = []
 
   try {
-    const data = JSON.parse(decode(new Uint8Array(await mcmetaJson.async('arraybuffer'))))
+    const parsed = JSON.parse(decode(new Uint8Array(await mcmetaJson.async('arraybuffer'))))
+    const result = PackMeta.safeParse(parsed)
+    const data: PackMeta = result.success ? result.data : parsed
 
-    if (isValidPackMeta(data)) {
+    if (result.success) {
       data.pack.pack_format = Math.max(MIN_PACK_FORMAT, data.pack.pack_format || 0)
       data.pack.min_format = Math.max(MIN_PACK_FORMAT, data.pack.min_format || 0)
-      data.pack.max_format = Math.max(MAX_PACK_FORMAT, data.pack.min_format || 0)
+      data.pack.max_format = Math.max(
+        MAX_PACK_FORMAT,
+        Math.max(data.pack.min_format || 0, data.pack.max_format || 0)
+      )
       delete data.pack.supported_formats
+    } else {
+      console.error('Failed to parse pack.mcmeta', mcmetaJson.name, result.error)
     }
 
     assets.push({
@@ -146,9 +154,8 @@ const mapMcmeta: JSZipAssetMapper = async (mcmetaJson: JSZip.JSZipObject) => {
   return assets
 }
 
-const assetMap: AssetMap<JSZipAssetMapper> = {
+const assetMap: AssetMap<JSZipAssetMap> = {
   'pack.mcmeta': { get: mapMcmeta },
-  ...mapImages('pack.png', 'pack.png'),
   ...cursorAssets.cursors,
   ...cursorAssets.meta,
   [`${PREVIOUS_NAMESPACE}/atlases/cursors.json`]: { get: mapCursorSettings }
@@ -167,18 +174,40 @@ export const processZip: FileProcessor = async (file: File) => {
   const assetBuckets: Record<string, Asset[]> = {}
 
   const promises: Promise<void>[] = []
-  zip.forEach((relativePath, zipEntry) => {
-    const deferredAsset = assetMap[relativePath]
-    if (!deferredAsset || !zipEntry) return
 
-    const promise = deferredAsset.get(zipEntry).then((assets) => {
-      for (const asset of assets) {
-        if (!assetBuckets[asset.path]) assetBuckets[asset.path] = []
-        assetBuckets[asset.path].push(asset)
-      }
-    })
-    promises.push(promise)
+  zip.forEach((relativePath, zipEntry) => {
+    const assetProvider = assetMap[relativePath]
+    if (!zipEntry || !assetProvider) return
+
+    promises.push(
+      assetProvider.get(zipEntry).then((assets) => {
+        for (const asset of assets) {
+          if (!assetBuckets[asset.path]) assetBuckets[asset.path] = []
+          assetBuckets[asset.path].push(asset)
+        }
+      })
+    )
   })
+
+  await Promise.all(promises)
+  promises.length = 0
+
+  zip.forEach((relativePath, zipEntry) => {
+    if (assetBuckets[relativePath]) return
+
+    promises.push(
+      zipEntry.async('uint8array').then((data) => {
+        if (!assetBuckets[relativePath]) assetBuckets[relativePath] = []
+
+        assetBuckets[relativePath].push({
+          data,
+          path: relativePath,
+          mergeStrategy: MergeStrategies.PREFER_FIRST
+        })
+      })
+    )
+  })
+
   await Promise.all(promises)
 
   const newZip = new JSZip()

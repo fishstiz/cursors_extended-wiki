@@ -9,7 +9,10 @@ next: true
 # Tools
 
 ## V3 Converter
-Convert **Minecraft Cursor** (v3) resource packs to v4. Only works on `.zip` files 
+Convert **Minecraft Cursor** (v3) resource packs to v4. Keeps the original files unless overwritten by the conversion. Only works on `.zip` resource packs. 
+
+> [!NOTE]
+> **v4** introduces a `resize_all` cursor which maps to the `grabbing` cursor in **v3**.
 
 <FileConverter :processor="v3Processor" :validator="v3Validator" accept=".zip" />
 
@@ -34,8 +37,8 @@ This allows you to easily modify cursor settings using the in-game GUI, and then
 />
 
 <script setup lang="ts">
-import { processZip as v3Processor, validateZip as v3Validator } from "./v3Mapper"
-import { processConfigFile, validateConfigFile, generateFileName as settingsZipName } from "./settingsGenerator"
+import { processZip as v3Processor, validateZip as v3Validator } from "./v3-mapper"
+import { processConfigFile, validateConfigFile, generateFileName as settingsZipName } from "./settings-generator"
 import FileConverter from "@/components/FileConverter.vue"
 
 </script>

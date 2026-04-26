@@ -1,7 +1,7 @@
 import JSZip from 'jszip'
-import { FileProcessor, FileValidationError, FileValidator } from '@/utils/fileValidator'
-import { isValidConfig } from '@/types/Config'
-import CursorSettings from '@/types/CursorSettings'
+import { FileProcessor, FileValidationError, FileValidator } from '@/utils/file-validator'
+import { Config } from '@/schema/config'
+import { CursorSettings } from '@/schema/cursor-settings'
 import { encode } from '@/utils/encoder'
 
 export const validateConfigFile: FileValidator = async (file: File) => {
@@ -13,11 +13,13 @@ export const validateConfigFile: FileValidator = async (file: File) => {
 export const processConfigFile: FileProcessor = async (file: File) => {
   const zip = new JSZip()
   const content = await file.text()
-  const data = JSON.parse(content)
+  const result = Config.safeParse(JSON.parse(content))
 
-  if (!isValidConfig(data)) {
+  if (!result.success) {
     throw new FileValidationError('Invalid config file')
   }
+
+  const { data } = result;
 
   if (!data.cursors || Object.keys(data.cursors).length === 0) {
     throw new FileValidationError('Config file must contain at least one cursor setting')
