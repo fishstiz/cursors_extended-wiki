@@ -16,7 +16,8 @@ export default defineConfig({
       { text: 'Home', link: '/' },
       { text: 'Getting Started', link: '/resource-pack/getting-started' },
       { text: 'Showcase', link: '/resource-pack/showcase' },
-      { text: 'Tools', link: '/tools' }
+      { text: 'Tools', link: '/tools' },
+      { text: 'Minecraft Cursor', link: 'https://fishstiz.github.io/minecraft-cursor-wiki/', }
     ],
     sidebar: [
       {
