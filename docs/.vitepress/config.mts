@@ -55,6 +55,7 @@ export default defineConfig({
         link: '/tools',
         items: [
           { text: 'V3 Converter', link: '/tools#v3-converter' },
+          { text: 'V4 Downgrader', link: '/tools#v4-downgrader' },
           { text: 'Cursor Settings Generator', link: '/tools#cursor-settings-generator' }
         ]
       },

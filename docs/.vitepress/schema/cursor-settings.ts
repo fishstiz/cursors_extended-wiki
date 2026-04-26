@@ -1,14 +1,14 @@
 import z from 'zod'
 
-export const CursorMetadata = z.object({
-  scale: z.number().optional(),
-  xhot: z.number().optional(),
-  yhot: z.number().optional()
+export const CursorProperties = z.object({
+  scale: z.number().default(1),
+  xhot: z.number().default(0),
+  yhot: z.number().default(0)
 })
 
-export type CursorMetadata = z.infer<typeof CursorMetadata>
+export type CursorProperties = z.infer<typeof CursorProperties>
 
-export const CursorSettings = CursorMetadata.extend({
+export const CursorSettings = CursorProperties.extend({
   enabled: z.boolean().optional(),
   animated: z.boolean().optional().nullish()
 })

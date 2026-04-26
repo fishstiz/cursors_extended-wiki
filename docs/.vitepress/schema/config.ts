@@ -1,7 +1,7 @@
 import z from 'zod'
-import { CursorSettings, CursorMetadata } from './cursor-settings'
+import { CursorSettings, CursorProperties } from './cursor-settings'
 
-export const GlobalSettings = CursorMetadata.extend({
+export const GlobalSettings = CursorProperties.extend({
   scaleActive: z.boolean().optional(),
   xhotActive: z.boolean().optional(),
   yhotActive: z.boolean().optional()

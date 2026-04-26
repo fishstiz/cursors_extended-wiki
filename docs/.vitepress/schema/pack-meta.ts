@@ -2,7 +2,7 @@ import z from "zod"
 
 export const PackMeta = z.looseObject({
   pack: z.looseObject({
-    pack_format: z.number(),
+    pack_format: z.number().default(0),
     min_format: z.number().default(0),
     max_format: z.number().default(0),
     description: z.string().optional().nullish(),
