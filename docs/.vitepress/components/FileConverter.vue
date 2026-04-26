@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { onUnmounted, ref } from 'vue'
 import { FileProcessor, FileValidator } from '@/utils/file-validator'
 import FileInput, { ChangeEvent } from './FileInput.vue'
 
@@ -76,6 +76,8 @@ async function processFile() {
     processing.value = false
   }
 }
+
+onUnmounted(() => removeDownload())
 </script>
 
 <style scoped>
