@@ -13,10 +13,13 @@ body:
     id: modrinth_id
     attributes:
       label: Modrinth Project ID
-      description: Required if no CurseForge ID
 
   - type: input
     id: curseforge_id
     attributes:
       label: CurseForge Project ID
-      description: Required if no Modrinth ID
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
