@@ -148,7 +148,7 @@ Specifies the default cursor settings and may also include animation properties.
       <td>The width of each frame. Defaults to the smaller value between the image's width and height. Caps at image width.</td>
     </tr>
     <tr>
-      <td><code>width</code>&nbsp;</td>
+      <td><code>height</code>&nbsp;</td>
       <td><code>int</code></td>
       <td>min dimension</td>
       <td>The height of each frame. Defaults to the smaller value between the image's width and height. Caps at image height.</td>
