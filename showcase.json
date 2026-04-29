@@ -2,11 +2,6 @@
   "$schema": "./showcase.schema.json",
   "packs": [
     {
-      "name": "Cobblemon Interface",
-      "modrinthId": "5DF3hBIs",
-      "curseforgeId": "860898"
-    },
-    {
       "name": "Omni Cursors",
       "modrinthId": "uuqPdQ8L",
       "curseforgeId": "1383051"
@@ -85,6 +80,16 @@
     {
       "name": "Excalibur | Tooltips & Cursor",
       "modrinthId": "HYz5DbMG"
+    },
+    {
+      "name": "Cobblemon Interface",
+      "modrinthId": "5DF3hBIs",
+      "curseforgeId": "860898"
+    },
+    {
+      "name": "Cobblemon Midnight",
+      "modrinthId": "hIjyjawb",
+      "curseforgeId": "1242068"
     },
     {
       "name": "Stoner Cursors",
