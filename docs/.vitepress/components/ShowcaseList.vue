@@ -55,8 +55,8 @@
         <div class="project-footer">
           <span class="project-author">{{ project.author }}</span>
           <div class="project-links">
-            <a v-if="project.modrinthUrl" :href="project.modrinthUrl">Modrinth</a>
-            <a v-if="project.curseforgeUrl" :href="project.curseforgeUrl">Curseforge</a>
+            <a v-if="project.modrinthUrl" :href="project.modrinthUrl" target="_blank">Modrinth</a>
+            <a v-if="project.curseforgeUrl" :href="project.curseforgeUrl" target="_blank">Curseforge</a>
           </div>
         </div>
       </div>
