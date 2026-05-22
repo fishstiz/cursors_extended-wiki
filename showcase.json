@@ -2,6 +2,11 @@
   "$schema": "./showcase.schema.json",
   "packs": [
     {
+      "name": "Overgrown Flowery Cursors",
+      "modrinthId": "oji9pGzH",
+      "curseforgeId": "1549327"
+    },
+    {
       "name": "Omni Cursors",
       "modrinthId": "uuqPdQ8L",
       "curseforgeId": "1383051"
