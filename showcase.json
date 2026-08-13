@@ -2,6 +2,15 @@
   "$schema": "./showcase.schema.json",
   "packs": [
     {
+      "name": "Niko Cursor",
+      "modrinthId": "I7nmFIyW",
+      "curseforgeId": "1650851"
+    },
+    {
+      "name": "Mandala's Golden Cursor",
+      "curseforgeId": "1647601"
+    },
+    {
       "name": "Overgrown Flowery Cursors",
       "modrinthId": "oji9pGzH",
       "curseforgeId": "1549327"
@@ -105,9 +114,37 @@
       "modrinthId": "vQ1zgZ3P"
     },
     {
+      "name": "STALKER Cursor",
+      "curseforgeId": "1576896"
+    },
+    {
+      "name": "Super Mario Mash-Up Cursors Extended Addon",
+      "modrinthId": "xyAWUM01"
+    },
+    {
+      "name": "Cursor Pixel",
+      "modrinthId": "bBzwP22W"
+    },
+    {
+      "name": "Barebones x Cursors Extended",
+      "modrinthId": "NQkvmIdX"
+    },
+    {
+      "name": "Fantasy Theme Diamond Cursor",
+      "modrinthId": "E6NDjo3A"
+    },
+    {
+      "name": "Console Cursors",
+      "modrinthId": "Z4K61kaM"
+    },
+    {
       "name": "Clean Bedrock-Style Cursors",
       "modrinthId": "xstBA7Bt",
       "curseforgeId": "1392759"
+    },
+    {
+      "name": "Pvp cursor",
+      "modrinthId": "RpStkbpS"
     },
     {
       "name": "Black Knift Cursor",
