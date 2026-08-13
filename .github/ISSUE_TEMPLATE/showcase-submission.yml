@@ -3,9 +3,9 @@ description: Submit your resource pack to the showcase
 labels: ['showcase']
 body:
   - type: input
-    id: name
+    id: project_name
     attributes:
-      label: Name
+      label: Project Name
     validations:
       required: true
 
