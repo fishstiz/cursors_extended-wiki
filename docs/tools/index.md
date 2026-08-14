@@ -54,8 +54,8 @@ This allows you to easily modify cursor settings using the in-game GUI, and then
 />
 
 <script setup lang="ts">
-import { processZip as packMapper, validateZip } from "./v3-mapper"
-import { processConfigFile, validateConfigFile, generateFileName as settingsZipName } from "./settings-generator"
+import { processZip as packMapper, validateZip } from "@/tools/v3-mapper"
+import { processConfigFile, validateConfigFile, generateFileName as settingsZipName } from "@/tools/settings-generator"
 import FileConverter from "@/components/FileConverter.vue"
 
 </script>

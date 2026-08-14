@@ -3,11 +3,11 @@ import { CursorAtlas } from '@/schema/cursor-atlas-v3'
 import { CursorMetadata as CursorMetadataV3 } from '@/schema/cursor-metadata-v3'
 import { CursorMetadata as CursorMetadataV4 } from '@/schema/cursor-metadata-v4'
 import { PackMeta } from '@/schema/pack-meta'
-import { FileProcessor, FileValidator } from '@/utils/file-validator'
+import { FileProcessingError, FileProcessor, FileValidator } from '@/utils/file-validator'
 import { decode, encode } from '@/utils/encoder'
 import type { Asset, AssetMap, AssetProvider, MergeStrategy } from '@/schema/asset'
 
-type MapDirection = 'upgrade' | 'downgrade'
+export type MapDirection = 'auto' | 'upgrade' | 'downgrade'
 type JSZipAssetConverter = AssetProvider<JSZip.JSZipObject>
 type CursorAssets = { cursors: AssetMap<JSZipAssetConverter>; meta: AssetMap<JSZipAssetConverter> }
 
@@ -343,12 +343,36 @@ export const validateZip: FileValidator = async (file: File) => {
     : { ok: true }
 }
 
-export const processZip = (direction: MapDirection = 'upgrade'): FileProcessor => {
-  const assetMap = direction === 'upgrade' ? upgradeAssetMap : downgradeAssetMap
+function resolveAssetMap(direction: MapDirection, zip: JSZip): AssetMap<JSZipAssetConverter> {
+  switch (direction) {
+    case 'upgrade':
+      return upgradeAssetMap
+    case 'downgrade':
+      return downgradeAssetMap
+    case 'auto': {
+      const hasV3 = !!zip.file(new RegExp(V3_NAMESPACE + '.+')).find((file) => !file.dir)
+      const hasV4 = !!zip.file(new RegExp(V4_NAMESPACE + '.+')).find((file) => !file.dir)
 
-  return async (file: File) => {
-    const arrayBuffer = await file.arrayBuffer()
+      if (hasV3 && hasV4) {
+        throw new FileProcessingError('File already contains V3 and V4 assets.')
+      }
+
+      if (!hasV3 && !hasV4) {
+        throw new FileProcessingError('File does not contain V3 or V4 assets')
+      }
+
+      return hasV3 ? upgradeAssetMap : downgradeAssetMap
+    }
+  }
+}
+
+export const processArrayBuffer = (
+  direction: MapDirection
+): ((arrayBuffer: ArrayBuffer) => Promise<Blob | MediaSource>) => {
+  return async (arrayBuffer: ArrayBuffer) => {
     const zip = await JSZip.loadAsync(arrayBuffer)
+
+    const assetMap = resolveAssetMap(direction, zip)
 
     const assetBuckets: Record<string, Asset[] | undefined> = {}
 
@@ -430,5 +454,12 @@ export const processZip = (direction: MapDirection = 'upgrade'): FileProcessor =
     }
 
     return await newZip.generateAsync({ type: 'blob' })
+  }
+}
+
+export const processZip = (direction: MapDirection = 'upgrade'): FileProcessor => {
+  return async (file: File) => {
+    const arrayBuffer = await file.arrayBuffer()
+    return processArrayBuffer(direction)(arrayBuffer)
   }
 }

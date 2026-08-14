@@ -20,3 +20,15 @@ export const CurseforgeProject = z.looseObject({
 })
 
 export type CurseforgeProject = z.infer<typeof CurseforgeProject>
+
+export const CurseforgeProjectFile = z.looseObject({
+  id: z.coerce.string(),
+  displayName: z.string(),
+  fileName: z.string(),
+  downloadUrl: z.string(),
+  gameVersions: z.string().array(),
+  isAvailable: z.boolean(),
+  fileDate: z.string().pipe(z.coerce.date())
+})
+
+export type CurseforgeProjectFile = z.infer<typeof CurseforgeProjectFile>

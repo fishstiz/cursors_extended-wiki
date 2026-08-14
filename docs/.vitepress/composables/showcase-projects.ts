@@ -4,6 +4,7 @@ import { Member, ModrinthProject } from '@/schema/modrinth-project'
 import { data } from '@/data/showcase.data'
 import { onMounted, onUnmounted, reactive, ref, type Reactive } from 'vue'
 import z from 'zod'
+import { reqJson } from '@/utils/request'
 
 // https://github.com/enjarai/the-curseforge-api-key
 const THE_CF_API_KEY = '$2a$10$bL4bIL5pUWqfcO7KQtnMReakwtfHbNKh6v1uTpKlzhwoueEJQnPnm'
@@ -36,14 +37,8 @@ async function getAndLogError(res: Response): Promise<Error> {
 }
 
 async function fetchModrinthAuthor(id: string, signal?: AbortSignal): Promise<string> {
-  const res = await fetch(`https://api.modrinth.com/v2/project/${id}/members`, { signal })
-
-  if (!res.ok) {
-    throw await getAndLogError(res)
-  }
-
   const members = modrinthMembersSchema
-    .parse(await res.json())
+    .parse(await reqJson(`https://api.modrinth.com/v2/project/${id}/members`, { signal }))
     .sort((a, b) => a.ordering - b.ordering)
 
   return members[0]?.user?.name || members[0]?.user?.username || ''
@@ -52,36 +47,26 @@ async function fetchModrinthAuthor(id: string, signal?: AbortSignal): Promise<st
 async function fetchModrinth(ids: string[], signal?: AbortSignal): Promise<ModrinthProject[]> {
   if (!ids.length) return []
 
-  const res = await fetch(`https://api.modrinth.com/v2/projects?ids=${JSON.stringify(ids)}`, {
-    signal
-  })
-
-  if (!res.ok) {
-    throw await getAndLogError(res)
-  }
-
-  return modrinthSchema.parse(await res.json())
+  return modrinthSchema.parse(
+    await reqJson(`https://api.modrinth.com/v2/projects?ids=${JSON.stringify(ids)}`, { signal })
+  )
 }
 
 async function fetchCurseforge(ids: string[], signal?: AbortSignal): Promise<CurseforgeProject[]> {
   if (!ids.length) return []
 
-  const res = await fetch(`https://api.curseforge.com/v1/mods`, {
-    method: 'POST',
-    signal,
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-      'x-api-key': THE_CF_API_KEY
-    },
-    body: JSON.stringify({ modIds: ids, filterPcOnly: true })
-  })
-
-  if (!res.ok) {
-    throw await getAndLogError(res)
-  }
-
-  return curseforgeSchema.parse(await res.json()).data
+  return curseforgeSchema.parse(
+    await reqJson(`https://api.curseforge.com/v1/mods`, {
+      method: 'POST',
+      signal,
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'x-api-key': THE_CF_API_KEY
+      },
+      body: JSON.stringify({ modIds: ids, filterPcOnly: true })
+    })
+  ).data
 }
 
 async function fetchProjects(signal?: AbortSignal): Promise<Reactive<Project>[]> {
@@ -121,6 +106,8 @@ async function fetchProjects(signal?: AbortSignal): Promise<Reactive<Project>[]>
       description: modrinthProject?.description ?? curseforgeProject?.summary ?? '',
       icon: modrinthProject?.icon_url ?? curseforgeProject?.logo?.url,
       author: '',
+      modrinthId: modrinthProject?.id,
+      curseforgeId: curseforgeProject?.id ? String(curseforgeProject.id) : undefined,
       modrinthUrl: modrinthProject
         ? `https://www.modrinth.com/${modrinthProject.project_type}/${modrinthProject.slug ?? modrinthProject.id}`
         : undefined,

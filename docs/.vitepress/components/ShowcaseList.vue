@@ -1,62 +1,80 @@
 <template>
-  <div class="container">
-    <div class="list-header">
-      <div class="list-controls">
-        <div class="sort-group">
-          <label for="sort">Sort by:</label>
-          <select
-            id="sort"
-            v-model="sortKey"
-            :disabled="projects.length === 0"
-            class="sort-selection list-control-btn"
-          >
-            <option value="none">None</option>
-            <option value="downloads">Downloads</option>
-            <option value="published">Date Published</option>
-            <option value="modified">Date Modified</option>
-          </select>
-          <button
-            @click="toggleOrder"
-            :disabled="projects.length === 0"
-            class="sort-order list-control-btn"
-          >
-            {{ sortOrder === 'asc' ? '↑' : '↓' }}
-          </button>
-        </div>
-      </div>
-      <span v-show="!loading" class="project-count">
-        {{ projects.length > 0 ? `${projects.length} projects` : 'No projects found' }}
-      </span>
-    </div>
+  <div>
+    <DownloadModal
+      v-if="downloadModalProject"
+      :project="downloadModalProject"
+      @close="downloadModalProject = null"
+    />
 
-    <div class="project-container">
-      <div v-if="loading" v-for="i in showcaseData.packs.length" :key="i" class="project skeleton">
-        <div class="project-icon skeleton-box"></div>
-        <div class="project-content">
-          <div class="skeleton-line title"></div>
-          <div class="skeleton-line desc"></div>
-          <div class="skeleton-line desc short"></div>
+    <div class="container">
+      <div class="list-header">
+        <div class="list-controls">
+          <div class="sort-group">
+            <label for="sort">Sort by:</label>
+            <select
+              id="sort"
+              v-model="sortKey"
+              :disabled="projects.length === 0"
+              class="sort-selection list-control-btn"
+            >
+              <option value="none">None</option>
+              <option value="downloads">Downloads</option>
+              <option value="published">Date Published</option>
+              <option value="modified">Date Modified</option>
+            </select>
+            <button
+              @click="toggleOrder"
+              :disabled="projects.length === 0"
+              class="sort-order list-control-btn"
+            >
+              {{ sortOrder === 'asc' ? '↑' : '↓' }}
+            </button>
+          </div>
         </div>
-        <div class="project-footer">
-          <div class="skeleton-line footer"></div>
-        </div>
+        <span v-show="!loading" class="project-count">
+          {{ projects.length > 0 ? `${projects.length} projects` : 'No projects found' }}
+        </span>
       </div>
-      <div v-else v-for="project in projects" :key="project.name" class="project">
-        <img
-          class="project-icon"
-          width="128px"
-          :src="project.icon ?? `https://placehold.co/128x128?text=${project.name}`"
-          :alt="project.name"
-        />
-        <div class="project-content">
-          <h3 class="project-name">{{ project.name }}</h3>
-          <p class="project-description">{{ project.description }}</p>
+
+      <div class="project-container">
+        <div
+          v-if="loading"
+          v-for="i in showcaseData.packs.length"
+          :key="i"
+          class="project skeleton"
+        >
+          <div class="project-icon skeleton-box"></div>
+          <div class="project-content">
+            <div class="skeleton-line title"></div>
+            <div class="skeleton-line desc"></div>
+            <div class="skeleton-line desc short"></div>
+          </div>
+          <div class="project-footer">
+            <div class="skeleton-line footer"></div>
+          </div>
         </div>
-        <div class="project-footer">
-          <span class="project-author">{{ project.author }}</span>
-          <div class="project-links">
-            <a v-if="project.modrinthUrl" :href="project.modrinthUrl" target="_blank">Modrinth</a>
-            <a v-if="project.curseforgeUrl" :href="project.curseforgeUrl" target="_blank">Curseforge</a>
+        <div v-else v-for="project in projects" :key="project.name" class="project">
+          <img
+            class="project-icon"
+            width="128px"
+            :src="project.icon ?? `https://placehold.co/128x128?text=${project.name}`"
+            :alt="project.name"
+          />
+          <div class="project-content">
+            <h3 class="project-name">{{ project.name }}</h3>
+            <p class="project-description">{{ project.description }}</p>
+          </div>
+          <div class="project-footer">
+            <span class="project-author">{{ project.author }}</span>
+            <div class="project-links">
+              <a v-if="project.modrinthUrl" :href="project.modrinthUrl" target="_blank">Modrinth</a>
+              <a v-if="project.curseforgeUrl" :href="project.curseforgeUrl" target="_blank">
+                CurseForge
+              </a>
+            </div>
+            <button @click="downloadModalProject = project" title="Download" class="download-btn">
+              <DownloadIcon />
+            </button>
           </div>
         </div>
       </div>
@@ -65,15 +83,21 @@
 </template>
 
 <script setup lang="ts">
+import type { Project } from '@/schema/project'
 import { computed, ref } from 'vue'
 import { data as showcaseData } from '@/data/showcase.data'
 import { useShowcaseProjects } from '@/composables/showcase-projects'
+import DownloadModal from './DownloadModal.vue'
+import DownloadIcon from './DownloadIcon.vue'
+
+const downloadModalRef = ref<HTMLDialogElement | null>(null)
 
 const { loading, projects: fetchedProjects } = useShowcaseProjects()
 
 type SortKey = 'none' | 'downloads' | 'published' | 'modified'
 const sortKey = ref<SortKey>('none')
 const sortOrder = ref<'asc' | 'desc'>('desc')
+const downloadModalProject = ref<Project | null>(null)
 
 const projects = computed(() => {
   if (sortKey.value === 'none') {
@@ -232,7 +256,6 @@ const toggleOrder = () => {
   grid-column: 2;
   display: flex;
   flex-wrap: wrap;
-  max-width: fit-content;
   align-items: end;
   gap: 0.5em 0.75em;
 }
@@ -248,6 +271,32 @@ const toggleOrder = () => {
 
   & a {
     text-decoration: none;
+  }
+}
+
+.download-btn {
+  margin-left: auto;
+  background-color: transparent;
+  border: transparent;
+
+  &:enabled {
+    cursor: pointer;
+  }
+
+  &:disabled {
+    background-color: var(--vp-c-bg-soft);
+    color: var(--vp-c-default-soft);
+  }
+
+  & svg {
+    width: 1.25em;
+    height: auto;
+    fill: var(--vp-c-brand-1);
+    transition: fill 200ms;
+  }
+
+  &:enabled:hover > svg {
+    fill: var(--vp-c-brand-2);
   }
 }
 

@@ -1,4 +1,5 @@
 import z from 'zod'
+import { fi } from 'zod/locales'
 
 export const User = z.looseObject({
   username: z.string(),
@@ -42,3 +43,21 @@ export const ModrinthProject = z.looseObject({
 })
 
 export type ModrinthProject = z.infer<typeof ModrinthProject>
+
+export const ModrinthProjectFile = z.looseObject({
+  filename: z.string(),
+  url: z.string(),
+  primary: z.boolean()
+})
+
+export type ModrinthProjectFile = z.infer<typeof ModrinthProjectFile>
+
+export const ModrinthProjectVersion = z.looseObject({
+  name: z.string(),
+  version_number: z.string(),
+  game_versions: z.string().array(),
+  date_published: z.string().pipe(z.coerce.date()),
+  files: ModrinthProjectFile.array()
+})
+
+export type ModrinthProjectVersion = z.infer<typeof ModrinthProjectVersion>
