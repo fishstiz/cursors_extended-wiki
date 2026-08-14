@@ -29,7 +29,7 @@ export async function reqJson(url: string, init?: RequestInit): Promise<unknown>
 }
 
 export async function proxy(url: string, init?: RequestInit): Promise<Response> {
-  const proxyUrl = import.meta.env.DEV ? 'http://127.0.0.1:8787' : 'https://fzproxy.workers.dev'
+  const proxyUrl = import.meta.env.DEV ? 'http://127.0.0.1:8787' : 'https://fzproxy.fishstiz.workers.dev'
 
   return req(`${proxyUrl}?url=${url}`, init)
 }
