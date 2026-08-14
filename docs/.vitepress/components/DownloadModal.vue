@@ -4,6 +4,7 @@
     ref="dialogRef"
     class="download-dialog"
     @close="closeModal"
+    @click.self="closeModal"
     @keydown.esc="closeModal"
   >
     <div class="modal-container">
