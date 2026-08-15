@@ -139,6 +139,10 @@ Each cursor has an associated **name** used to identify the texture and its sett
   </tbody>
 </table>
 
+> [!NOTE] 
+> The unused cursors are for compatibility. 
+> If another mod uses those cursors then the custom texture will be applied automatically when possible.
+
 <script setup lang="ts">
 import { commonNodes, useLiteTreeHighlighter } from '@/composables/lite-tree-highlighter'
 import icons from '@/utils/icons'
