@@ -7,11 +7,49 @@
       "items": {
         "type": "object",
         "required": ["name"],
-        "anyOf": [{ "required": ["modrinthId"] }, { "required": ["curseforgeId"] }],
+        "anyOf": [
+          { "required": ["modrinthId"] },
+          { "required": ["curseforgeId"] },
+          { "required": ["staticData", "externalLinks"] }
+        ],
         "properties": {
           "name": { "type": "string" },
           "modrinthId": { "type": "string" },
-          "curseforgeId": { "type": "string" }
+          "curseforgeId": { "type": "string" },
+          "externalLinks": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": { "name": { "type": "string" }, "url": { "type": "string" } },
+              "required": ["name", "url"]
+            }
+          },
+          "staticData": {
+            "type": "object",
+            "required": ["iconUrl", "author", "description", "datePublished", "dateModified"],
+            "properties": {
+              "iconUrl": {
+                "type": "string",
+                "description": "The icon URL"
+              },
+              "author": {
+                "type": "string",
+                "description": "Author of the resource pack."
+              },
+              "description": {
+                "type": "string",
+                "description": "Short description of the resource pack."
+              },
+              "datePublished": {
+                "type": "string",
+                "description": "Date in ISO 8601 string format."
+              },
+              "dateModified": {
+                "type": "string",
+                "description": "Date in ISO 8601 string format."
+              }
+            }
+          }
         },
         "additionalProperties": false
       }

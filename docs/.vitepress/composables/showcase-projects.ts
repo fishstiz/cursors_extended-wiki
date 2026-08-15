@@ -69,6 +69,10 @@ async function fetchCurseforge(ids: string[], signal?: AbortSignal): Promise<Cur
   ).data
 }
 
+function resolveTime(date: string | undefined): number | null {
+  return date ? new Date(date).getTime() : null
+}
+
 async function fetchProjects(signal?: AbortSignal): Promise<Reactive<Project>[]> {
   if (cache) return cache
 
@@ -77,8 +81,15 @@ async function fetchProjects(signal?: AbortSignal): Promise<Reactive<Project>[]>
   const curseforgeIds: string[] = []
 
   packs.forEach((pack) => {
-    if (pack.modrinthId) modrinthIds.push(pack.modrinthId)
-    if (pack.curseforgeId) curseforgeIds.push(pack.curseforgeId)
+    const { modrinthId, curseforgeId } = pack
+
+    if (modrinthId) {
+      modrinthIds.push(modrinthId)
+    }
+
+    if (curseforgeId) {
+      curseforgeIds.push(curseforgeId)
+    }
   })
 
   const results = await Promise.allSettled([
@@ -99,30 +110,38 @@ async function fetchProjects(signal?: AbortSignal): Promise<Reactive<Project>[]>
   const projects = packs.reduce<Reactive<Project>[]>((acc, pack) => {
     const modrinthProject = pack.modrinthId ? modrinthMap.get(pack.modrinthId) : null
     const curseforgeProject = pack.curseforgeId ? curseforgeMap.get(pack.curseforgeId) : null
-    if (!modrinthProject && !curseforgeProject) return acc
+    const { staticData } = pack
+
+    if (!modrinthProject && !curseforgeProject && !staticData) {
+      return acc
+    }
 
     const project: Reactive<Project> = reactive({
-      name: modrinthProject?.title ?? curseforgeProject?.name ?? '',
-      description: modrinthProject?.description ?? curseforgeProject?.summary ?? '',
-      icon: modrinthProject?.icon_url ?? curseforgeProject?.logo?.url,
-      author: '',
+      name: modrinthProject?.title ?? curseforgeProject?.name ?? pack.name,
+      description:
+        modrinthProject?.description ?? curseforgeProject?.summary ?? staticData?.description ?? '',
+      icon: modrinthProject?.icon_url ?? curseforgeProject?.logo?.url ?? staticData?.iconUrl,
+      author: staticData?.author ?? '',
       modrinthId: modrinthProject?.id,
       curseforgeId: curseforgeProject?.id ? String(curseforgeProject.id) : undefined,
       modrinthUrl: modrinthProject
         ? `https://www.modrinth.com/${modrinthProject.project_type}/${modrinthProject.slug ?? modrinthProject.id}`
         : undefined,
       curseforgeUrl: curseforgeProject ? curseforgeProject.links.websiteUrl : undefined,
+      externalLinks: pack.externalLinks,
       downloads: (modrinthProject?.downloads ?? 0) + (curseforgeProject?.downloadCount ?? 0),
       published: new Date(
         Math.min(
           modrinthProject?.published?.getTime() ?? Infinity,
-          curseforgeProject?.dateReleased?.getTime() ?? Infinity
+          curseforgeProject?.dateReleased?.getTime() ?? Infinity,
+          resolveTime(staticData?.datePublished) ?? Infinity
         )
       ),
       modified: new Date(
         Math.max(
           modrinthProject?.updated?.getTime() ?? 0,
-          curseforgeProject?.dateModified?.getTime() ?? 0
+          curseforgeProject?.dateModified?.getTime() ?? 0,
+          resolveTime(staticData?.dateModified) ?? 0
         )
       )
     })

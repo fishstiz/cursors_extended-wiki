@@ -1,3 +1,8 @@
+export type ProjectLink = {
+  url: string
+  name: string
+}
+
 export type Project = {
   name: string
   author: string
@@ -7,6 +12,7 @@ export type Project = {
   curseforgeId?: string
   modrinthUrl?: string
   curseforgeUrl?: string
+  externalLinks?: ProjectLink[]
   downloads: number
   published: Date
   modified: Date

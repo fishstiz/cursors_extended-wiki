@@ -23,3 +23,34 @@ body:
     id: notes
     attributes:
       label: Notes
+
+  - type: markdown
+    attributes:
+      value: '<br />'
+
+  - type: markdown
+    attributes:
+      value: '## Static data'
+
+  - type: markdown
+    attributes: 
+      value: This is not required if you already entered a valid Modrinth or CurseForge ID, otherwise you must fill out everything below.
+
+  - type: input
+    attributes:
+      label: Author
+  
+  - type: input
+    attributes:
+      label: Icon URL
+
+  - type: input
+    attributes: 
+      label: Short Description
+
+  - type: textarea
+    attributes:
+      label: External Links
+      description: 'Enter any number of external links. Must have at least one if there is no Modrinth or CurseForge ID.'
+      placeholder: 'PlanetMinecraft - https://www.planetminecraft.com/texture-pack/bedrock-style-cursors-for-java-edition/'
+       

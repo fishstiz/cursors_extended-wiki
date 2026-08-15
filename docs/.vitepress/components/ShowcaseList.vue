@@ -71,8 +71,20 @@
               <a v-if="project.curseforgeUrl" :href="project.curseforgeUrl" target="_blank">
                 CurseForge
               </a>
+              <a
+                v-for="externalLink in project.externalLinks"
+                :href="externalLink.url"
+                target="_blank"
+              >
+                {{ externalLink.name }}
+              </a>
             </div>
-            <button @click="downloadModalProject = project" title="Download" class="download-btn">
+            <button
+              v-if="project.modrinthId || project.curseforgeId"
+              @click="downloadModalProject = project"
+              title="Download"
+              class="download-btn"
+            >
               <DownloadIcon />
             </button>
           </div>
@@ -89,8 +101,6 @@ import { data as showcaseData } from '@/data/showcase.data'
 import { useShowcaseProjects } from '@/composables/showcase-projects'
 import DownloadModal from './DownloadModal.vue'
 import DownloadIcon from './DownloadIcon.vue'
-
-const downloadModalRef = ref<HTMLDialogElement | null>(null)
 
 const { loading, projects: fetchedProjects } = useShowcaseProjects()
 
