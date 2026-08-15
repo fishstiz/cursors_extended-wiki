@@ -9,7 +9,7 @@ title: Creating Cursor Textures
 - Format: **.png**
 
 **Recommendations**:
-- Use 1x scale for best resolution and accuracy. Use a **power-of-two** size (16x16, 32x32, 64x64, etc.).
+- Use 1x scale for best resolution and accuracy, and dimensions in powers of two (16x16, 32x32, 64x64, etc.).
 - Use 0x scale for GUI scale.
 - Other scale values should be configured on a per-user basis.
 
@@ -237,7 +237,7 @@ Next we add the following cursor settings. Note the line numbers.
 		"frames": [
 			3,
 			{ "index": 1, "time": 4 },
-			0,
+			0
 		]
 	}
 }
