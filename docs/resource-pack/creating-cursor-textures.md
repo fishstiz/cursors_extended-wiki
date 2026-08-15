@@ -223,6 +223,7 @@ Suppose we have an animated texture for the default cursor. It has four frames, 
     src="/assets/examples/cursor-settings-example1.png"
     alt="Cursor Settings Example 1"
     width="100"
+    style="margin: auto"
   />
   <figcaption style="text-align: center"><code>default.png</code></figcaption>
 </figure>
