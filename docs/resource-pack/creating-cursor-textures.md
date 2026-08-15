@@ -16,7 +16,7 @@ title: Creating Cursor Textures
 ## Animated Textures
 
 1. In a single image, stack multiple textures vertically from top to bottom to create frames. 
-   - All frames must have the size. Refer to the requirements above.
+   - All frames must have the same size. Refer to the requirements above.
    - The topmost frame will be used when the animation is disabled.
 2. Create a [cursor settings](#animated-textures) file in the same directory as the image.
    - For example, if creating an animated texture for the `default` cursor, you will need the `default.png` and `default.png.json`.
