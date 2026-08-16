@@ -2,6 +2,26 @@
   "$schema": "./showcase.schema.json",
   "packs": [
     {
+      "name": "Cursors Contrasted",
+      "staticData": {
+        "author": "16x16pixelcat",
+        "description": "Cursor extended resource pack inspired by high contrasts",
+        "iconUrl": "https://16x16pixelcat.github.io/stuff/cursors_contrasted/icon.png",
+        "dateModified": "2026-08-16T17:17:20.556Z",
+        "datePublished": "2026-08-16T17:17:20.556Z"
+      },
+      "externalLinks": [
+        {
+          "name": "Website",
+          "url": "https://16x16pixelcat.github.io/stuff/cursors_contrasted.html"
+        },
+        {
+          "name": "Github",
+          "url": "https://github.com/16x16pixelcat/Cursors-Contrasted"
+        }
+      ]
+    },
+    {
       "name": "Niko Cursor",
       "modrinthId": "I7nmFIyW",
       "curseforgeId": "1650851"
